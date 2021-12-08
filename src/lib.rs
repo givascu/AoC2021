@@ -15,7 +15,7 @@ pub fn read_strings(filename: &str, delim: &str) -> io::Result<Vec<String>> {
     )
 }
 
-fn get_bit_one_frequency(diagnosis: &Vec<String>) -> Vec<usize> {
+fn get_bit_one_frequency(diagnosis: &[String]) -> Vec<usize> {
     let mut frequency = vec![0; diagnosis[0].len()];
     for d in diagnosis {
         for (i, c) in d.chars().enumerate() {
@@ -27,22 +27,19 @@ fn get_bit_one_frequency(diagnosis: &Vec<String>) -> Vec<usize> {
     frequency
 }
 
-fn get_dominant_bits(diagnosis: &Vec<String>) -> Vec<i32> {
-    let frequency = get_bit_one_frequency(&diagnosis);
-    let mut dominant_bits = vec![0; frequency.len()];
-    for (i, f) in frequency.iter().enumerate() {
-        // 0 for bit 0 most common
-        // 1 for bit 1 most common
-        // 2 for equal number of bits 0 and bits 1
-        if f > &(diagnosis.len() - f) {
-            dominant_bits[i] = 1;
-        } else if f < &(diagnosis.len() - f) {
-            dominant_bits[i] = 0;
-        } else {
-            dominant_bits[i] = 2;
+fn get_dominant_bits(diagnosis: &[String]) -> Vec<i32> {
+    let n = diagnosis.len();
+    let mut result = vec![0; diagnosis[0].len()];
+
+    for (i, f) in get_bit_one_frequency(diagnosis).iter().enumerate() {
+        match f.cmp(&(n - f)) {
+            std::cmp::Ordering::Less => result[i] = 0,
+            std::cmp::Ordering::Greater => result[i] = 1,
+            std::cmp::Ordering::Equal => result[i] = 2,
         }
     }
-    dominant_bits
+
+    result
 }
 
 pub fn solve_03_2() -> i32 {
@@ -90,18 +87,20 @@ pub fn solve_03_2() -> i32 {
 
 pub fn solve_03_1() -> i32 {
     let diagnosis = read_strings("data/03.in", "\n").unwrap();
-    let frequency = get_bit_one_frequency(&diagnosis);
 
     let mut gamma = String::new();
     let mut epsilon = String::new();
 
-    for f in frequency {
-        if 2 * f > diagnosis.len() {
-            gamma.push('1');
-            epsilon.push('0');
-        } else {
-            gamma.push('0');
-            epsilon.push('1');
+    for b in get_dominant_bits(&diagnosis) {
+        match b {
+            1 => {
+                gamma.push('1');
+                epsilon.push('0');
+            }
+            _ => {
+                gamma.push('0');
+                epsilon.push('1');
+            }
         }
     }
 
