@@ -26,9 +26,12 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     let mut line = String::new();
     reader.read_line(&mut line).unwrap();
 
-    let marked_numbers = line.trim().split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
-    let mut board_numbers = Vec::new();
+    let marked_numbers = line
+        .trim().split(',')
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect::<Vec<i32>>();
 
+    let mut board_numbers = Vec::new();
     for line in reader.lines() {
         let line = line.unwrap();
         if !line.is_empty() {
@@ -41,8 +44,8 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     (marked_numbers, board_numbers)
 }
 
-pub fn solve_04_1() -> i32 {
-    let (marked_numbers, board_numbers) = read_bingo_input("data/04.in");
+fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<BingoBoard>) {
+    let (to_mark, board_numbers) = read_bingo_input(filename);
 
     let mut boards = Vec::new();
     for k in (0 .. board_numbers.len()).step_by(25) {
@@ -51,7 +54,33 @@ pub fn solve_04_1() -> i32 {
         boards.push(board);
     }
 
-    for mark in marked_numbers {
+    (to_mark, boards)
+}
+
+pub fn solve_04_2() -> i32 {
+    let (to_mark, mut boards) = build_bingo_input("data/04.in");
+
+    let mut last_board = BingoBoard::new();
+    let mut last_mark = 0;
+
+    for mark in to_mark {
+        for board in &mut boards {
+            let already_won = board.has_won();
+            board.mark_one(mark);
+            if !already_won && board.has_won() {
+                last_board = board.clone();
+                last_mark = mark;
+            }
+        }
+    }
+
+    last_board.calculate_score(last_mark)
+}
+
+pub fn solve_04_1() -> i32 {
+    let (to_mark, mut boards) = build_bingo_input("data/04.in");
+
+    for mark in to_mark {
         for board in &mut boards {
             board.mark_one(mark);
             if board.has_won() {

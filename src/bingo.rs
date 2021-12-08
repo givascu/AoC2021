@@ -1,4 +1,4 @@
-#[derive(Debug,Default)]
+#[derive(Debug,Default,Clone)]
 pub struct BingoBoard {
     values: Vec<i32>,
     marked: Vec<i32>,
