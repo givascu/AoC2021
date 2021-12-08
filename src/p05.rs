@@ -29,17 +29,14 @@ pub fn solve_2() -> i32 {
 
     for line in reader.lines() {
         let line = line.unwrap();
-        let mut parts = line.split("->");
-        let p1 = parts
-            .next()
-            .unwrap()
+        let (p1, p2) = line.split_once("->").unwrap();
+
+        let p1 = p1
             .trim()
             .split(',')
             .map(|x| x.parse::<i32>().unwrap())
             .collect::<Vec<i32>>();
-        let p2 = parts
-            .next()
-            .unwrap()
+        let p2 = p2
             .trim()
             .split(',')
             .map(|x| x.parse::<i32>().unwrap())
