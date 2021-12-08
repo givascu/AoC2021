@@ -1,6 +1,10 @@
 use std::{fs, io::{self, BufRead, BufReader}, vec};
 
-pub fn read_ints(filename: &str, delim: &str) -> io::Result<Vec<i32>> {
+use crate::bingo::BingoBoard;
+
+pub mod bingo;
+
+fn _read_ints(filename: &str, delim: &str) -> io::Result<Vec<i32>> {
     Ok(
         fs::read_to_string(filename)?
         .split(delim).map(|x| x.parse::<i32>().unwrap())
@@ -8,11 +12,55 @@ pub fn read_ints(filename: &str, delim: &str) -> io::Result<Vec<i32>> {
     )
 }
 
-pub fn read_strings(filename: &str, delim: &str) -> io::Result<Vec<String>> {
+fn read_strings(filename: &str, delim: &str) -> io::Result<Vec<String>> {
     Ok(
         fs::read_to_string(filename)?
         .split(delim).map(|x| x.to_string()).collect()
     )
+}
+
+fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
+    let file = fs::File::open(filename).unwrap();
+    let mut reader = BufReader::new(file);
+
+    let mut line = String::new();
+    reader.read_line(&mut line).unwrap();
+
+    let marked_numbers = line.trim().split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+    let mut board_numbers = Vec::new();
+
+    for line in reader.lines() {
+        let line = line.unwrap();
+        if !line.is_empty() {
+            for number in line.trim().split(' ').filter(|x| !x.is_empty()).map(|x| x.parse::<i32>().unwrap()) {
+                board_numbers.push(number);
+            }
+        }
+    }
+
+    (marked_numbers, board_numbers)
+}
+
+pub fn solve_04_1() -> i32 {
+    let (marked_numbers, board_numbers) = read_bingo_input("data/04.in");
+
+    let mut boards = Vec::new();
+    for k in (0 .. board_numbers.len()).step_by(25) {
+        let mut board = BingoBoard::new();
+        board.fill_in(&board_numbers[k .. k + 25]);
+        boards.push(board);
+    }
+
+    for mark in marked_numbers {
+        for board in &mut boards {
+            board.mark_one(mark);
+            if board.has_won() {
+                return board.calculate_score(mark);
+            }
+        }
+    }
+
+    0
 }
 
 fn get_bit_one_frequency(diagnosis: &[String]) -> Vec<usize> {

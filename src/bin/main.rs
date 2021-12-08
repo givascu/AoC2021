@@ -1,4 +1,3 @@
 fn main() {
-    println!("{}", aoc2021::solve_03_1());
-    println!("{}", aoc2021::solve_03_2());
+    println!("{}", aoc2021::solve_04_1());
 }
