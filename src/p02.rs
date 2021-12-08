@@ -1,4 +1,7 @@
-use std::{fs, io::{BufReader, BufRead}};
+use std::{
+    fs,
+    io::{BufRead, BufReader},
+};
 
 pub fn solve_2() -> i32 {
     let file = fs::File::open("data/02.in").unwrap();

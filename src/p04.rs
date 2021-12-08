@@ -1,16 +1,19 @@
-use std::{fs, io::{BufReader, BufRead}};
+use std::{
+    fs,
+    io::{BufRead, BufReader},
+};
 
-#[derive(Debug,Default,Clone)]
-pub struct BingoBoard {
+#[derive(Debug, Default, Clone)]
+pub struct Board {
     values: Vec<i32>,
     marked: Vec<i32>,
 }
 
-impl BingoBoard {
+impl Board {
     const SIZE: usize = 5;
 
-    pub fn new() -> BingoBoard {
-        BingoBoard {
+    pub fn new() -> Board {
+        Board {
             values: Vec::new(),
             marked: Vec::new(),
         }
@@ -18,10 +21,10 @@ impl BingoBoard {
 
     pub fn fill_in(&mut self, from: &[i32]) {
         self.values.clear();
-        for value in from.iter().take(BingoBoard::SIZE * BingoBoard::SIZE) {
+        for value in from.iter().take(Board::SIZE * Board::SIZE) {
             self.values.push(*value);
         }
-        self.marked = vec![0; BingoBoard::SIZE * BingoBoard::SIZE];
+        self.marked = vec![0; Board::SIZE * Board::SIZE];
     }
 
     pub fn mark_one(&mut self, value: i32) {
@@ -34,20 +37,20 @@ impl BingoBoard {
 
     pub fn has_won(&self) -> bool {
         // Check lines
-        for k in 0 .. BingoBoard::SIZE {
-            let line = &self.marked[k * BingoBoard::SIZE .. (k+1) * BingoBoard::SIZE];
-            if line.iter().sum::<i32>() == BingoBoard::SIZE as i32 {
-                return true
+        for k in 0..Board::SIZE {
+            let line = &self.marked[k * Board::SIZE..(k + 1) * Board::SIZE];
+            if line.iter().sum::<i32>() == Board::SIZE as i32 {
+                return true;
             }
         }
         // Check columns
-        for k in 0 .. BingoBoard::SIZE {
+        for k in 0..Board::SIZE {
             let mut sum = 0;
-            for idx in (k .. BingoBoard::SIZE * BingoBoard::SIZE).step_by(BingoBoard::SIZE) {
+            for idx in (k..Board::SIZE * Board::SIZE).step_by(Board::SIZE) {
                 sum += self.marked[idx];
             }
-            if sum == BingoBoard::SIZE as i32 {
-                return true
+            if sum == Board::SIZE as i32 {
+                return true;
             }
         }
         false
@@ -72,7 +75,8 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     reader.read_line(&mut line).unwrap();
 
     let marked_numbers = line
-        .trim().split(',')
+        .trim()
+        .split(',')
         .map(|x| x.parse::<i32>().unwrap())
         .collect::<Vec<i32>>();
 
@@ -80,7 +84,12 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     for line in reader.lines() {
         let line = line.unwrap();
         if !line.is_empty() {
-            for number in line.trim().split(' ').filter(|x| !x.is_empty()).map(|x| x.parse::<i32>().unwrap()) {
+            for number in line
+                .trim()
+                .split(' ')
+                .filter(|x| !x.is_empty())
+                .map(|x| x.parse::<i32>().unwrap())
+            {
                 board_numbers.push(number);
             }
         }
@@ -89,13 +98,13 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     (marked_numbers, board_numbers)
 }
 
-fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<BingoBoard>) {
+fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<Board>) {
     let (to_mark, board_numbers) = read_bingo_input(filename);
 
     let mut boards = Vec::new();
-    for k in (0 .. board_numbers.len()).step_by(25) {
-        let mut board = BingoBoard::new();
-        board.fill_in(&board_numbers[k .. k + 25]);
+    for k in (0..board_numbers.len()).step_by(25) {
+        let mut board = Board::new();
+        board.fill_in(&board_numbers[k..k + 25]);
         boards.push(board);
     }
 
@@ -105,7 +114,7 @@ fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<BingoBoard>) {
 pub fn solve_2() -> i32 {
     let (to_mark, mut boards) = build_bingo_input("data/04.in");
 
-    let mut last_board = BingoBoard::new();
+    let mut last_board = Board::new();
     let mut last_mark = 0;
 
     for mark in to_mark {

@@ -33,7 +33,7 @@ pub fn solve_2() -> i32 {
     let mut ogr = diagnosis.clone(); // oxygen generator rating
     let mut csr = diagnosis.clone(); // co2 scrubber rating
 
-    for i in 0 .. diagnosis[0].len() {
+    for i in 0..diagnosis[0].len() {
         if ogr.len() == 1 && csr.len() == 1 {
             break;
         }
