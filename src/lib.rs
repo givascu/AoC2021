@@ -34,7 +34,7 @@ impl Line {
     }
 }
 
-pub fn solve_05_1() -> i32 {
+pub fn solve_05() -> i32 {
     let file = fs::File::open("data/05.in").unwrap();
     let reader = BufReader::new(file);
 
@@ -51,20 +51,30 @@ pub fn solve_05_1() -> i32 {
     }
 
     for l in lines {
+        let x_min = cmp::min(l.p1.0, l.p2.0);
+        let x_max = cmp::max(l.p1.0, l.p2.0);
+        let y_min = cmp::min(l.p1.1, l.p2.1);
+        let y_max = cmp::max(l.p1.1, l.p2.1);
+
         if l.p1.0 == l.p2.0 {
             // X coordinate is the same
-            let y_lower = cmp::min(l.p1.1, l.p2.1);
-            let y_upper = cmp::max(l.p1.1, l.p2.1);
-            for y in y_lower .. (y_upper + 1) {
+            for y in y_min .. (y_max + 1) {
                 let p = crossed.entry((l.p1.0, y)).or_insert(0);
                 *p += 1;
             }
         } else if l.p1.1 == l.p2.1 {
             // Y coordinate is the same
-            let x_lower = cmp::min(l.p1.0, l.p2.0);
-            let x_upper = cmp::max(l.p1.0, l.p2.0);
-            for x in x_lower .. (x_upper + 1) {
+            for x in x_min .. (x_max + 1) {
                 let p = crossed.entry((x, l.p1.1)).or_insert(0);
+                *p += 1;
+            }
+        } else if (l.p1.0 - l.p2.0).abs() == (l.p1.1 - l.p2.1).abs() {
+            // 45 degree line
+            let slope = (l.p2.1 - l.p1.1) / (l.p2.0 - l.p1.0);
+            let b = l.p1.1 - slope * l.p1.0;
+            for x in x_min .. (x_max + 1) {
+                let y = slope * x + b;
+                let p = crossed.entry((x, y)).or_insert(0);
                 *p += 1;
             }
         }
