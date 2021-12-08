@@ -1,4 +1,4 @@
-use std::{fs, io::{self, BufRead, BufReader}, vec};
+use std::{fs, io::{self, BufRead, BufReader}, vec, collections::HashMap, cmp};
 
 use crate::bingo::BingoBoard;
 
@@ -17,6 +17,60 @@ fn read_strings(filename: &str, delim: &str) -> io::Result<Vec<String>> {
         fs::read_to_string(filename)?
         .split(delim).map(|x| x.to_string()).collect()
     )
+}
+
+#[derive(Debug,Default)]
+struct Line {
+    p1: (i32, i32),
+    p2: (i32, i32),
+}
+
+impl Line {
+    fn new(x1: i32, y1: i32, x2: i32, y2: i32) -> Line {
+        Line {
+            p1: (x1, y1),
+            p2: (x2, y2)
+        }
+    }
+}
+
+pub fn solve_05_1() -> i32 {
+    let file = fs::File::open("data/05.in").unwrap();
+    let reader = BufReader::new(file);
+
+    let mut crossed = HashMap::new();
+    let mut lines = Vec::new();
+
+    for line in reader.lines() {
+        let line = line.unwrap();
+        let mut parts = line.split("->");
+        let p1 = parts.next().unwrap().trim().split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+        let p2 = parts.next().unwrap().trim().split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+
+        lines.push(Line::new(p1[0], p1[1], p2[0], p2[1]));
+    }
+
+    for l in lines {
+        if l.p1.0 == l.p2.0 {
+            // X coordinate is the same
+            let y_lower = cmp::min(l.p1.1, l.p2.1);
+            let y_upper = cmp::max(l.p1.1, l.p2.1);
+            for y in y_lower .. (y_upper + 1) {
+                let p = crossed.entry((l.p1.0, y)).or_insert(0);
+                *p += 1;
+            }
+        } else if l.p1.1 == l.p2.1 {
+            // Y coordinate is the same
+            let x_lower = cmp::min(l.p1.0, l.p2.0);
+            let x_upper = cmp::max(l.p1.0, l.p2.0);
+            for x in x_lower .. (x_upper + 1) {
+                let p = crossed.entry((x, l.p1.1)).or_insert(0);
+                *p += 1;
+            }
+        }
+    }
+
+    crossed.iter().filter(|&(_, v)| *v >= 2).count() as i32
 }
 
 fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
