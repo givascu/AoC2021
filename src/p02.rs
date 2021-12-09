@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-pub fn solve_2() -> i32 {
+pub fn solve_2() -> i64 {
     let file = fs::File::open("data/02.in").unwrap();
     let reader = BufReader::new(file);
 
@@ -15,7 +15,7 @@ pub fn solve_2() -> i32 {
         let line = line.unwrap();
         let mut parts = line.split(' ');
         let direction = parts.next().unwrap();
-        let value = parts.next().unwrap().parse::<i32>().unwrap();
+        let value = parts.next().unwrap().parse::<i64>().unwrap();
 
         if direction == "forward" {
             horiz += value;

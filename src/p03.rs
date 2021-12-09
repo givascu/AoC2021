@@ -12,7 +12,7 @@ fn get_bit_one_frequency(diagnosis: &[String]) -> Vec<usize> {
     frequency
 }
 
-fn get_dominant_bits(diagnosis: &[String]) -> Vec<i32> {
+fn get_dominant_bits(diagnosis: &[String]) -> Vec<i64> {
     let n = diagnosis.len();
     let mut result = vec![0; diagnosis[0].len()];
 
@@ -27,7 +27,7 @@ fn get_dominant_bits(diagnosis: &[String]) -> Vec<i32> {
     result
 }
 
-pub fn solve_2() -> i32 {
+pub fn solve_2() -> i64 {
     let diagnosis = utils::read_strings("data/03.in", "\n").unwrap();
 
     let mut ogr = diagnosis.clone(); // oxygen generator rating
@@ -64,13 +64,13 @@ pub fn solve_2() -> i32 {
         }
     }
 
-    let ogr = i32::from_str_radix(&ogr[0], 2).unwrap();
-    let csr = i32::from_str_radix(&csr[0], 2).unwrap();
+    let ogr = i64::from_str_radix(&ogr[0], 2).unwrap();
+    let csr = i64::from_str_radix(&csr[0], 2).unwrap();
 
     ogr * csr
 }
 
-pub fn solve_1() -> i32 {
+pub fn solve_1() -> i64 {
     let diagnosis = utils::read_strings("data/03.in", "\n").unwrap();
 
     let mut gamma = String::new();
@@ -89,8 +89,8 @@ pub fn solve_1() -> i32 {
         }
     }
 
-    let gamma = i32::from_str_radix(&gamma, 2).unwrap();
-    let epsilon = i32::from_str_radix(&epsilon, 2).unwrap();
+    let gamma = i64::from_str_radix(&gamma, 2).unwrap();
+    let epsilon = i64::from_str_radix(&epsilon, 2).unwrap();
 
     gamma * epsilon
 }

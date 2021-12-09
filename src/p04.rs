@@ -5,8 +5,8 @@ use std::{
 
 #[derive(Debug, Default, Clone)]
 pub struct Board {
-    values: Vec<i32>,
-    marked: Vec<i32>,
+    values: Vec<i64>,
+    marked: Vec<i64>,
 }
 
 impl Board {
@@ -19,7 +19,7 @@ impl Board {
         }
     }
 
-    pub fn fill_in(&mut self, from: &[i32]) {
+    pub fn fill_in(&mut self, from: &[i64]) {
         self.values.clear();
         for value in from.iter().take(Board::SIZE * Board::SIZE) {
             self.values.push(*value);
@@ -27,7 +27,7 @@ impl Board {
         self.marked = vec![0; Board::SIZE * Board::SIZE];
     }
 
-    pub fn mark_one(&mut self, value: i32) {
+    pub fn mark_one(&mut self, value: i64) {
         for (i, val) in self.values.iter().enumerate() {
             if val == &value {
                 self.marked[i] = 1;
@@ -39,7 +39,7 @@ impl Board {
         // Check lines
         for k in 0..Board::SIZE {
             let line = &self.marked[k * Board::SIZE..(k + 1) * Board::SIZE];
-            if line.iter().sum::<i32>() == Board::SIZE as i32 {
+            if line.iter().sum::<i64>() == Board::SIZE as i64 {
                 return true;
             }
         }
@@ -49,14 +49,14 @@ impl Board {
             for idx in (k..Board::SIZE * Board::SIZE).step_by(Board::SIZE) {
                 sum += self.marked[idx];
             }
-            if sum == Board::SIZE as i32 {
+            if sum == Board::SIZE as i64 {
                 return true;
             }
         }
         false
     }
 
-    pub fn calculate_score(&self, multiplier: i32) -> i32 {
+    pub fn calculate_score(&self, multiplier: i64) -> i64 {
         let mut sum = 0;
         for (i, &mark) in self.marked.iter().enumerate() {
             if mark == 0 {
@@ -67,7 +67,7 @@ impl Board {
     }
 }
 
-fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
+fn read_bingo_input(filename: &str) -> (Vec<i64>, Vec<i64>) {
     let file = fs::File::open(filename).unwrap();
     let mut reader = BufReader::new(file);
 
@@ -77,8 +77,8 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     let marked_numbers = line
         .trim()
         .split(',')
-        .map(|x| x.parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
+        .map(|x| x.parse::<i64>().unwrap())
+        .collect::<Vec<i64>>();
 
     let mut board_numbers = Vec::new();
     for line in reader.lines() {
@@ -88,7 +88,7 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
                 .trim()
                 .split(' ')
                 .filter(|x| !x.is_empty())
-                .map(|x| x.parse::<i32>().unwrap())
+                .map(|x| x.parse::<i64>().unwrap())
             {
                 board_numbers.push(number);
             }
@@ -98,7 +98,7 @@ fn read_bingo_input(filename: &str) -> (Vec<i32>, Vec<i32>) {
     (marked_numbers, board_numbers)
 }
 
-fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<Board>) {
+fn build_bingo_input(filename: &str) -> (Vec<i64>, Vec<Board>) {
     let (to_mark, board_numbers) = read_bingo_input(filename);
 
     let mut boards = Vec::new();
@@ -111,7 +111,7 @@ fn build_bingo_input(filename: &str) -> (Vec<i32>, Vec<Board>) {
     (to_mark, boards)
 }
 
-pub fn solve_2() -> i32 {
+pub fn solve_2() -> i64 {
     let (to_mark, mut boards) = build_bingo_input("data/04.in");
 
     let mut last_board = Board::new();
@@ -131,7 +131,7 @@ pub fn solve_2() -> i32 {
     last_board.calculate_score(last_mark)
 }
 
-pub fn solve_1() -> i32 {
+pub fn solve_1() -> i64 {
     let (to_mark, mut boards) = build_bingo_input("data/04.in");
 
     for mark in to_mark {

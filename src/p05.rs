@@ -7,12 +7,12 @@ use std::{
 
 #[derive(Debug, Default)]
 struct Line {
-    p1: (i32, i32),
-    p2: (i32, i32),
+    p1: (i64, i64),
+    p2: (i64, i64),
 }
 
 impl Line {
-    fn new(x1: i32, y1: i32, x2: i32, y2: i32) -> Line {
+    fn new(x1: i64, y1: i64, x2: i64, y2: i64) -> Line {
         Line {
             p1: (x1, y1),
             p2: (x2, y2),
@@ -20,7 +20,7 @@ impl Line {
     }
 }
 
-pub fn solve_2() -> i32 {
+pub fn solve_2() -> i64 {
     let file = fs::File::open("data/05.in").unwrap();
     let reader = BufReader::new(file);
 
@@ -34,13 +34,13 @@ pub fn solve_2() -> i32 {
         let p1 = p1
             .trim()
             .split(',')
-            .map(|x| x.parse::<i32>().unwrap())
-            .collect::<Vec<i32>>();
+            .map(|x| x.parse::<i64>().unwrap())
+            .collect::<Vec<i64>>();
         let p2 = p2
             .trim()
             .split(',')
-            .map(|x| x.parse::<i32>().unwrap())
-            .collect::<Vec<i32>>();
+            .map(|x| x.parse::<i64>().unwrap())
+            .collect::<Vec<i64>>();
 
         lines.push(Line::new(p1[0], p1[1], p2[0], p2[1]));
     }
@@ -75,5 +75,5 @@ pub fn solve_2() -> i32 {
         }
     }
 
-    crossed.iter().filter(|&(_, v)| *v >= 2).count() as i32
+    crossed.iter().filter(|&(_, v)| *v >= 2).count() as i64
 }
