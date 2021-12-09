@@ -1,6 +1,7 @@
 use std::{
     cmp,
     collections::HashMap,
+    error::Error,
     fs,
     io::{BufRead, BufReader},
 };
@@ -20,16 +21,16 @@ impl Line {
     }
 }
 
-pub fn solve_2() -> i64 {
-    let file = fs::File::open("data/05.in").unwrap();
+pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+    let file = fs::File::open("data/05.in")?;
     let reader = BufReader::new(file);
 
     let mut crossed = HashMap::new();
     let mut lines = Vec::new();
 
     for line in reader.lines() {
-        let line = line.unwrap();
-        let (p1, p2) = line.split_once("->").unwrap();
+        let line = line?;
+        let (p1, p2) = line.split_once("->").ok_or("split_once()")?;
 
         let p1 = p1
             .trim()
@@ -75,5 +76,5 @@ pub fn solve_2() -> i64 {
         }
     }
 
-    crossed.iter().filter(|&(_, v)| *v >= 2).count() as i64
+    Ok(crossed.iter().filter(|&(_, v)| *v >= 2).count() as i64)
 }

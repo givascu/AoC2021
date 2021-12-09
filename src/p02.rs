@@ -1,10 +1,11 @@
 use std::{
+    error::Error,
     fs,
     io::{BufRead, BufReader},
 };
 
-pub fn solve_2() -> i64 {
-    let file = fs::File::open("data/02.in").unwrap();
+pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+    let file = fs::File::open("data/02.in")?;
     let reader = BufReader::new(file);
 
     let mut horiz = 0;
@@ -12,10 +13,9 @@ pub fn solve_2() -> i64 {
     let mut aim = 0;
 
     for line in reader.lines() {
-        let line = line.unwrap();
-        let mut parts = line.split(' ');
-        let direction = parts.next().unwrap();
-        let value = parts.next().unwrap().parse::<i64>().unwrap();
+        let line = line?;
+        let (direction, value) = line.split_once(" ").ok_or("split_once()")?;
+        let value = value.parse::<i64>()?;
 
         if direction == "forward" {
             horiz += value;
@@ -27,5 +27,5 @@ pub fn solve_2() -> i64 {
         }
     }
 
-    horiz * depth
+    Ok(horiz * depth)
 }

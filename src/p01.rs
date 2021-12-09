@@ -1,3 +1,5 @@
+use std::error::Error;
+
 use crate::utils;
 
 fn solve(v: &[i64]) -> i64 {
@@ -10,18 +12,18 @@ fn solve(v: &[i64]) -> i64 {
     count
 }
 
-pub fn solve_1() -> i64 {
-    let v = utils::read_ints("data/01.in", "\n").unwrap();
-    solve(&v)
+pub fn solve_1() -> Result<i64, Box<dyn Error>> {
+    let v = utils::read_ints("data/01.in", "\n")?;
+    Ok(solve(&v))
 }
 
-pub fn solve_2() -> i64 {
-    let v = utils::read_ints("data/01.in", "\n").unwrap();
+pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+    let v = utils::read_ints("data/01.in", "\n")?;
     let mut w = Vec::new();
     for i in 0..v.len() {
         if i + 2 < v.len() {
             w.push(v[i] + v[i + 1] + v[i + 2]);
         }
     }
-    solve(&w)
+    Ok(solve(&w))
 }

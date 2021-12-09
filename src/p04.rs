@@ -1,4 +1,5 @@
 use std::{
+    error::Error,
     fs,
     io::{BufRead, BufReader},
 };
@@ -67,12 +68,12 @@ impl Board {
     }
 }
 
-fn read_bingo_input(filename: &str) -> (Vec<i64>, Vec<i64>) {
-    let file = fs::File::open(filename).unwrap();
+fn read_bingo_input(filename: &str) -> Result<(Vec<i64>, Vec<i64>), Box<dyn Error>> {
+    let file = fs::File::open(filename)?;
     let mut reader = BufReader::new(file);
 
     let mut line = String::new();
-    reader.read_line(&mut line).unwrap();
+    reader.read_line(&mut line)?;
 
     let marked_numbers = line
         .trim()
@@ -82,7 +83,7 @@ fn read_bingo_input(filename: &str) -> (Vec<i64>, Vec<i64>) {
 
     let mut board_numbers = Vec::new();
     for line in reader.lines() {
-        let line = line.unwrap();
+        let line = line?;
         if !line.is_empty() {
             for number in line
                 .trim()
@@ -95,11 +96,11 @@ fn read_bingo_input(filename: &str) -> (Vec<i64>, Vec<i64>) {
         }
     }
 
-    (marked_numbers, board_numbers)
+    Ok((marked_numbers, board_numbers))
 }
 
-fn build_bingo_input(filename: &str) -> (Vec<i64>, Vec<Board>) {
-    let (to_mark, board_numbers) = read_bingo_input(filename);
+fn build_bingo_input(filename: &str) -> Result<(Vec<i64>, Vec<Board>), Box<dyn Error>> {
+    let (to_mark, board_numbers) = read_bingo_input(filename)?;
 
     let mut boards = Vec::new();
     for k in (0..board_numbers.len()).step_by(25) {
@@ -108,11 +109,11 @@ fn build_bingo_input(filename: &str) -> (Vec<i64>, Vec<Board>) {
         boards.push(board);
     }
 
-    (to_mark, boards)
+    Ok((to_mark, boards))
 }
 
-pub fn solve_2() -> i64 {
-    let (to_mark, mut boards) = build_bingo_input("data/04.in");
+pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+    let (to_mark, mut boards) = build_bingo_input("data/04.in")?;
 
     let mut last_board = Board::new();
     let mut last_mark = 0;
@@ -128,20 +129,20 @@ pub fn solve_2() -> i64 {
         }
     }
 
-    last_board.calculate_score(last_mark)
+    Ok(last_board.calculate_score(last_mark))
 }
 
-pub fn solve_1() -> i64 {
-    let (to_mark, mut boards) = build_bingo_input("data/04.in");
+pub fn solve_1() -> Result<i64, Box<dyn Error>> {
+    let (to_mark, mut boards) = build_bingo_input("data/04.in")?;
 
     for mark in to_mark {
         for board in &mut boards {
             board.mark_one(mark);
             if board.has_won() {
-                return board.calculate_score(mark);
+                return Ok(board.calculate_score(mark));
             }
         }
     }
 
-    0
+    Err("Could not find last board to win!".into())
 }

@@ -1,3 +1,5 @@
+use std::error::Error;
+
 use crate::utils;
 
 fn get_bit_one_frequency(diagnosis: &[String]) -> Vec<usize> {
@@ -27,8 +29,8 @@ fn get_dominant_bits(diagnosis: &[String]) -> Vec<i64> {
     result
 }
 
-pub fn solve_2() -> i64 {
-    let diagnosis = utils::read_strings("data/03.in", "\n").unwrap();
+pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+    let diagnosis = utils::read_strings("data/03.in", "\n")?;
 
     let mut ogr = diagnosis.clone(); // oxygen generator rating
     let mut csr = diagnosis.clone(); // co2 scrubber rating
@@ -43,7 +45,7 @@ pub fn solve_2() -> i64 {
             let ogr_bit = if ogr_bits[i] == 0 { '0' } else { '1' };
             let mut ogr_copy = Vec::new();
             for item in &ogr {
-                if item.chars().nth(i).unwrap() == ogr_bit {
+                if item.chars().nth(i).ok_or("nth()")? == ogr_bit {
                     ogr_copy.push(item.clone());
                 }
             }
@@ -56,7 +58,7 @@ pub fn solve_2() -> i64 {
             let mut csr_copy = Vec::new();
 
             for item in &csr {
-                if item.chars().nth(i).unwrap() == csr_bit {
+                if item.chars().nth(i).ok_or("nth()")? == csr_bit {
                     csr_copy.push(item.clone());
                 }
             }
@@ -64,14 +66,14 @@ pub fn solve_2() -> i64 {
         }
     }
 
-    let ogr = i64::from_str_radix(&ogr[0], 2).unwrap();
-    let csr = i64::from_str_radix(&csr[0], 2).unwrap();
+    let ogr = i64::from_str_radix(&ogr[0], 2)?;
+    let csr = i64::from_str_radix(&csr[0], 2)?;
 
-    ogr * csr
+    Ok(ogr * csr)
 }
 
-pub fn solve_1() -> i64 {
-    let diagnosis = utils::read_strings("data/03.in", "\n").unwrap();
+pub fn solve_1() -> Result<i64, Box<dyn Error>> {
+    let diagnosis = utils::read_strings("data/03.in", "\n")?;
 
     let mut gamma = String::new();
     let mut epsilon = String::new();
@@ -89,8 +91,8 @@ pub fn solve_1() -> i64 {
         }
     }
 
-    let gamma = i64::from_str_radix(&gamma, 2).unwrap();
-    let epsilon = i64::from_str_radix(&epsilon, 2).unwrap();
+    let gamma = i64::from_str_radix(&gamma, 2)?;
+    let epsilon = i64::from_str_radix(&epsilon, 2)?;
 
-    gamma * epsilon
+    Ok(gamma * epsilon)
 }
