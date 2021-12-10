@@ -3,7 +3,9 @@ use std::{
     error::Error,
 };
 
-fn get_neighbor_points(map: &[String], pos: (usize, usize)) -> Vec<(usize, usize)> {
+type Point = (usize, usize);
+
+fn get_neighbor_points(map: &[String], pos: Point) -> Vec<Point> {
     let mut neighbors = Vec::new();
 
     if pos.0 > 0 {
@@ -22,7 +24,7 @@ fn get_neighbor_points(map: &[String], pos: (usize, usize)) -> Vec<(usize, usize
     neighbors
 }
 
-fn get_low_points(map: &[String]) -> Vec<(usize, usize)> {
+fn get_low_points(map: &[String]) -> Vec<Point> {
     let mut low_points = Vec::new();
 
     for y in 0..map.len() {
@@ -39,7 +41,7 @@ fn get_low_points(map: &[String]) -> Vec<(usize, usize)> {
     low_points
 }
 
-fn get_basin_size(map: &[String], start: (usize, usize)) -> i64 {
+fn get_basin_size(map: &[String], start: Point) -> i64 {
     let mut visited = HashSet::new();
     let mut queue = VecDeque::new();
     queue.push_back(start);
@@ -61,8 +63,8 @@ fn get_basin_size(map: &[String], start: (usize, usize)) -> i64 {
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
     let map = include_str!("../data/09.in")
-        .split('\n')
-        .map(|x| x.to_string())
+        .lines()
+        .map(ToString::to_string)
         .collect::<Vec<_>>();
 
     let mut basins = get_low_points(&map)
@@ -76,8 +78,8 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
     let map = include_str!("../data/09.in")
-        .split('\n')
-        .map(|x| x.to_string())
+        .lines()
+        .map(ToString::to_string)
         .collect::<Vec<_>>();
 
     Ok(get_low_points(&map)
