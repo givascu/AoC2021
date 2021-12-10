@@ -8,6 +8,7 @@ mod p05;
 mod p06;
 mod p07;
 mod p08;
+mod p09;
 
 mod utils;
 
@@ -23,6 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("06: {} {}", p06::solve(80)?, p06::solve(256)?);
             println!("07: {} {}", p07::solve_1()?, p07::solve_2()?);
             println!("08: {} {}", p08::solve_1()?, p08::solve_2()?);
+            println!("09: {} {}", p09::solve_1()?, p09::solve_2()?);
         }
         _ => match args[1].as_str() {
             "1" => println!("{} {}", p01::solve_1()?, p01::solve_2()?),
@@ -33,6 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "6" => println!("{} {}", p06::solve(80)?, p06::solve(256)?),
             "7" => println!("{} {}", p07::solve_1()?, p07::solve_2()?),
             "8" => println!("{} {}", p08::solve_1()?, p08::solve_2()?),
+            "9" => println!("{} {}", p09::solve_1()?, p09::solve_2()?),
             _ => return Err(format!("Invalid day: '{}'", args[1]).into()),
         },
     }
