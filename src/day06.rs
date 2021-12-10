@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::utils;
 
 pub fn solve(days: i64) -> Result<i64, Box<dyn Error>> {
-    let counters = utils::read_ints("data/06.in", ",")?;
+    let counters = utils::read_ints("input/06.txt", ",")?;
 
     let mut frequency: Vec<i64> = vec![0; 9];
     for c in counters {

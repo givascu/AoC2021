@@ -18,7 +18,7 @@ where
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let file = fs::File::open("data/08.in")?;
+    let file = fs::File::open("input/08.txt")?;
     let reader = BufReader::new(file);
     let mut sum = 0i64;
 
@@ -68,7 +68,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let file = fs::File::open("data/08.in")?;
+    let file = fs::File::open("input/08.txt")?;
     let reader = BufReader::new(file);
 
     let mut counter = 0i64;

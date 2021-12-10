@@ -87,7 +87,7 @@ fn complete_line(line: &str) -> Vec<char> {
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let mut scores = include_str!("../data/10.in")
+    let mut scores = include_str!("../input/10.txt")
         .lines()
         .filter(|line| line_corrupted_at(*line).is_none())
         .map(|incomplete_line| {
@@ -103,7 +103,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let lines = include_str!("../data/10.in").lines().collect::<Vec<_>>();
+    let lines = include_str!("../input/10.txt").lines().collect::<Vec<_>>();
 
     let mut score = 0i64;
     for line in lines {

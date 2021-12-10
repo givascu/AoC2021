@@ -30,7 +30,7 @@ fn get_dominant_bits(diagnosis: &[String]) -> Vec<i64> {
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let diagnosis = utils::read_strings("data/03.in", "\n")?;
+    let diagnosis = utils::read_strings("input/03.txt", "\n")?;
 
     let mut ogr = diagnosis.clone(); // oxygen generator rating
     let mut csr = diagnosis.clone(); // co2 scrubber rating
@@ -73,7 +73,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let diagnosis = utils::read_strings("data/03.in", "\n")?;
+    let diagnosis = utils::read_strings("input/03.txt", "\n")?;
 
     let mut gamma = String::new();
     let mut epsilon = String::new();

@@ -62,7 +62,7 @@ fn get_basin_size(map: &[String], start: Point) -> i64 {
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let map = include_str!("../data/09.in")
+    let map = include_str!("../input/09.txt")
         .lines()
         .map(ToString::to_string)
         .collect::<Vec<_>>();
@@ -77,7 +77,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let map = include_str!("../data/09.in")
+    let map = include_str!("../input/09.txt")
         .lines()
         .map(ToString::to_string)
         .collect::<Vec<_>>();

@@ -5,7 +5,7 @@ use std::{
 };
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let file = fs::File::open("data/02.in")?;
+    let file = fs::File::open("input/02.txt")?;
     let reader = BufReader::new(file);
 
     let mut horiz = 0;

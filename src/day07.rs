@@ -3,7 +3,7 @@ use std::{cmp, error::Error};
 use crate::utils;
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let positions = utils::read_ints("data/07.in", ",")?;
+    let positions = utils::read_ints("input/07.txt", ",")?;
 
     let mut best = i64::MAX;
 
@@ -22,7 +22,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let positions = utils::read_ints("data/07.in", ",")?;
+    let positions = utils::read_ints("input/07.txt", ",")?;
 
     let mut best = i64::MAX;
 

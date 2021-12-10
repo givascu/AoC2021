@@ -113,7 +113,7 @@ fn build_bingo_input(filename: &str) -> Result<(Vec<i64>, Vec<Board>), Box<dyn E
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let (to_mark, mut boards) = build_bingo_input("data/04.in")?;
+    let (to_mark, mut boards) = build_bingo_input("input/04.txt")?;
 
     let mut last_board = Board::new();
     let mut last_mark = 0;
@@ -133,7 +133,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let (to_mark, mut boards) = build_bingo_input("data/04.in")?;
+    let (to_mark, mut boards) = build_bingo_input("input/04.txt")?;
 
     for mark in to_mark {
         for board in &mut boards {

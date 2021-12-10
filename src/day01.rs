@@ -13,12 +13,12 @@ fn solve(v: &[i64]) -> i64 {
 }
 
 pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let v = utils::read_ints("data/01.in", "\n")?;
+    let v = utils::read_ints("input/01.txt", "\n")?;
     Ok(solve(&v))
 }
 
 pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let v = utils::read_ints("data/01.in", "\n")?;
+    let v = utils::read_ints("input/01.txt", "\n")?;
     let mut w = Vec::new();
     for i in 0..v.len() {
         if i + 2 < v.len() {
