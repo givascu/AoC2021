@@ -10,10 +10,10 @@ type Signal = HashSet<char>;
 
 fn pop_one<F>(from: &mut Vec<Signal>, predicate: F) -> Signal
 where
-    F: Fn(&&Signal) -> bool,
+    F: Fn(&Signal) -> bool,
 {
-    let signal = from.iter().find(&predicate).unwrap().clone();
-    from.retain(|x| !predicate(&x));
+    let signal = from.iter().find(|x| predicate(x)).unwrap().clone();
+    from.retain(|x| !predicate(x));
     signal
 }
 
