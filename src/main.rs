@@ -10,6 +10,7 @@ mod day07;
 mod day08;
 mod day09;
 mod day10;
+mod day11;
 
 mod utils;
 
@@ -27,6 +28,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("08: {} {}", day08::solve_1()?, day08::solve_2()?);
             println!("09: {} {}", day09::solve_1()?, day09::solve_2()?);
             println!("10: {} {}", day10::solve_1()?, day10::solve_2()?);
+            println!("11: {} {}", day11::solve_1(), day11::solve_2());
         }
         _ => match args[1].as_str() {
             "1" => println!("{} {}", day01::solve_1()?, day01::solve_2()?),
@@ -39,6 +41,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "8" => println!("{} {}", day08::solve_1()?, day08::solve_2()?),
             "9" => println!("{} {}", day09::solve_1()?, day09::solve_2()?),
             "10" => println!("{} {}", day10::solve_1()?, day10::solve_2()?),
+            "11" => println!("{} {}", day11::solve_1(), day11::solve_2()),
             _ => return Err(format!("Invalid day: '{}'", args[1]).into()),
         },
     }
