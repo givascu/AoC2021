@@ -2,31 +2,43 @@ use std::collections::{HashMap, HashSet};
 
 type Graph<'a> = HashMap<&'a str, HashSet<&'a str>>;
 
-fn count_paths_rec<'a>(
-    graph: &'a Graph,
-    src: &'a str,
-    dst: &'a str,
-    count: &mut i64,
-    visited: &mut HashSet<&'a str>,
-) {
-    visited.insert(src);
-    if src == dst {
-        *count += 1;
-    } else {
-        graph.get(src).unwrap().iter().for_each(|&node| {
-            if node.chars().all(char::is_uppercase) || !visited.contains(node) {
-                count_paths_rec(graph, node, dst, count, visited);
+fn count_paths(graph: &Graph, src: &str, can_double_pass: bool, seen: &HashSet<&str>) -> i64 {
+    if src == "end" {
+        return 1;
+    }
+
+    let mut count = 0;
+
+    graph
+        .get(src)
+        .unwrap()
+        .iter()
+        .filter(|&node| *node != "start")
+        .for_each(|&node| {
+            if node.chars().all(char::is_uppercase) || !seen.contains(node) {
+                let mut seen_copy = seen.clone();
+                seen_copy.insert(node);
+                count += count_paths(graph, node, can_double_pass, &seen_copy);
+            } else if can_double_pass {
+                count += count_paths(graph, node, false, seen);
             }
         });
-    }
-    visited.remove(src);
+
+    count
 }
 
-fn count_paths<'a>(graph: &Graph, src: &'a str, dst: &'a str) -> i64 {
-    let mut visited = HashSet::<&'a str>::new();
-    let mut count = 0i64;
-    count_paths_rec(graph, src, dst, &mut count, &mut visited);
-    count
+pub fn solve_2() -> i64 {
+    let mut graph = Graph::new();
+
+    include_str!("../input/12.txt").lines().for_each(|line| {
+        let (src, dst) = line.split_once('-').unwrap();
+        graph.entry(src).or_default().insert(dst);
+        graph.entry(dst).or_default().insert(src);
+    });
+
+    let mut seen = HashSet::new();
+    seen.insert("start");
+    count_paths(&graph, "start", true, &seen)
 }
 
 pub fn solve_1() -> i64 {
@@ -38,5 +50,7 @@ pub fn solve_1() -> i64 {
         graph.entry(dst).or_default().insert(src);
     });
 
-    count_paths(&graph, "start", "end")
+    let mut seen = HashSet::new();
+    seen.insert("start");
+    count_paths(&graph, "start", false, &seen)
 }
