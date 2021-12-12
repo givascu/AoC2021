@@ -1,5 +1,3 @@
-use std::error::Error;
-
 fn get_score_1(c: char) -> i64 {
     match c {
         '(' | ')' => 3,
@@ -88,31 +86,30 @@ fn complete_line(line: &str) -> Vec<char> {
     stack.iter().map(get_match).rev().collect()
 }
 
-pub fn solve_2() -> Result<i64, Box<dyn Error>> {
+pub fn solve_2() -> i64 {
     let mut scores = include_str!("../input/10.txt")
         .lines()
         .filter(|line| line_corrupted_at(*line).is_none())
         .map(|incomplete_line| {
             complete_line(incomplete_line)
                 .iter()
-                .fold(0, |acc, c| acc * 5 + get_score_2(*c))
+                .fold(0, |score, c| score * 5 + get_score_2(*c))
         })
         .collect::<Vec<_>>();
 
     scores.sort_unstable();
 
-    Ok(scores[scores.len() / 2])
+    scores[scores.len() / 2]
 }
 
-pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let lines = include_str!("../input/10.txt").lines().collect::<Vec<_>>();
-
-    let mut score = 0i64;
-    for line in lines {
-        if let Some(c) = line_corrupted_at(line) {
-            score += get_score_1(c);
-        }
-    }
-
-    Ok(score)
+pub fn solve_1() -> i64 {
+    include_str!("../input/10.txt")
+        .lines()
+        .fold(0i64, |score, line| {
+            score
+                + match line_corrupted_at(line) {
+                    Some(c) => get_score_1(c),
+                    None => 0,
+                }
+        })
 }

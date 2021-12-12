@@ -1,31 +1,21 @@
-use std::{
-    error::Error,
-    fs,
-    io::{BufRead, BufReader},
-};
-
-pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let file = fs::File::open("input/02.txt")?;
-    let reader = BufReader::new(file);
-
+pub fn solve_2() -> i64 {
     let mut horiz = 0;
     let mut depth = 0;
     let mut aim = 0;
 
-    for line in reader.lines() {
-        let line = line?;
-        let (direction, value) = line.split_once(" ").ok_or("split_once()")?;
-        let value = value.parse::<i64>()?;
+    include_str!("../input/02.txt").lines().for_each(|line| {
+        let (dir, val) = line.split_once(' ').unwrap();
+        let val = val.parse::<i64>().unwrap();
 
-        if direction == "forward" {
-            horiz += value;
-            depth += aim * value;
-        } else if direction == "down" {
-            aim += value;
-        } else if direction == "up" {
-            aim -= value;
+        if dir == "forward" {
+            horiz += val;
+            depth += aim * val;
+        } else if dir == "down" {
+            aim += val;
+        } else if dir == "up" {
+            aim -= val;
         }
-    }
+    });
 
-    Ok(horiz * depth)
+    horiz * depth
 }

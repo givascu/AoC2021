@@ -53,15 +53,19 @@ fn advance_grid(grid: &mut Grid, y_max: i32, x_max: i32) -> i64 {
 
 pub fn solve_2() -> i64 {
     let mut grid = Grid::new();
+    let mut y_max = 0;
+    let mut x_max = 0;
 
     for (y, line) in include_str!("../input/11.txt").lines().enumerate() {
         for (x, c) in line.chars().map(|c| c.to_digit(10).unwrap()).enumerate() {
             grid.entry((y as i32, x as i32)).or_insert(c);
         }
+        y_max += 1;
+        x_max = line.chars().count() as i32;
     }
 
     for k in 1..i64::MAX {
-        if advance_grid(&mut grid, 10, 10) == grid.len() as i64 {
+        if advance_grid(&mut grid, y_max, x_max) == grid.len() as i64 {
             return k;
         }
     }
@@ -71,12 +75,16 @@ pub fn solve_2() -> i64 {
 
 pub fn solve_1() -> i64 {
     let mut grid = Grid::new();
+    let mut y_max = 0;
+    let mut x_max = 0;
 
     for (y, line) in include_str!("../input/11.txt").lines().enumerate() {
         for (x, c) in line.chars().map(|c| c.to_digit(10).unwrap()).enumerate() {
             grid.entry((y as i32, x as i32)).or_insert(c);
         }
+        y_max += 1;
+        x_max = line.chars().count() as i32;
     }
 
-    (0..100).fold(0, |acc, _| acc + advance_grid(&mut grid, 10, 10))
+    (0..100).fold(0, |acc, _| acc + advance_grid(&mut grid, y_max, x_max))
 }
