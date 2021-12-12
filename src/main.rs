@@ -43,7 +43,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "8" => println!("{} {}", day08::solve_1()?, day08::solve_2()?),
             "9" => println!("{} {}", day09::solve_1()?, day09::solve_2()?),
             "10" => println!("{} {}", day10::solve_1()?, day10::solve_2()?),
-            "11" => println!("{} {}", day11::solve_1(), day11::solve_2()),
+            "11" => println!("{} {}", day11::solve_1(), day11::solve_2(),),
             "12" => println!("{} {}", day12::solve_1(), day12::solve_2()),
             _ => return Err(format!("Invalid day: '{}'", args[1]).into()),
         },
