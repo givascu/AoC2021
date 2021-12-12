@@ -1,7 +1,3 @@
-use std::error::Error;
-
-use crate::utils;
-
 fn get_bit_one_frequency(diagnosis: &[String]) -> Vec<usize> {
     let mut frequency = vec![0; diagnosis[0].len()];
     for d in diagnosis {
@@ -29,8 +25,11 @@ fn get_dominant_bits(diagnosis: &[String]) -> Vec<i64> {
     result
 }
 
-pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let diagnosis = utils::read_strings("input/03.txt", "\n")?;
+pub fn solve_2() -> i64 {
+    let diagnosis = include_str!("../input/03.txt")
+        .lines()
+        .map(|x| x.to_string())
+        .collect::<Vec<_>>();
 
     let mut ogr = diagnosis.clone(); // oxygen generator rating
     let mut csr = diagnosis.clone(); // co2 scrubber rating
@@ -45,7 +44,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
             let ogr_bit = if ogr_bits[i] == 0 { '0' } else { '1' };
             let mut ogr_copy = Vec::new();
             for item in &ogr {
-                if item.chars().nth(i).ok_or("nth()")? == ogr_bit {
+                if item.chars().nth(i).unwrap() == ogr_bit {
                     ogr_copy.push(item.clone());
                 }
             }
@@ -58,7 +57,7 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
             let mut csr_copy = Vec::new();
 
             for item in &csr {
-                if item.chars().nth(i).ok_or("nth()")? == csr_bit {
+                if item.chars().nth(i).unwrap() == csr_bit {
                     csr_copy.push(item.clone());
                 }
             }
@@ -66,14 +65,18 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
         }
     }
 
-    let ogr = i64::from_str_radix(&ogr[0], 2)?;
-    let csr = i64::from_str_radix(&csr[0], 2)?;
+    let ogr = i64::from_str_radix(&ogr[0], 2).unwrap();
+    let csr = i64::from_str_radix(&csr[0], 2).unwrap();
 
-    Ok(ogr * csr)
+    ogr * csr
 }
 
-pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let diagnosis = utils::read_strings("input/03.txt", "\n")?;
+pub fn solve_1() -> i64 {
+    // let diagnosis = utils::read_strings("input/03.txt", "\n")?;
+    let diagnosis = include_str!("../input/03.txt")
+        .lines()
+        .map(|x| x.to_string())
+        .collect::<Vec<_>>();
 
     let mut gamma = String::new();
     let mut epsilon = String::new();
@@ -91,8 +94,8 @@ pub fn solve_1() -> Result<i64, Box<dyn Error>> {
         }
     }
 
-    let gamma = i64::from_str_radix(&gamma, 2)?;
-    let epsilon = i64::from_str_radix(&epsilon, 2)?;
+    let gamma = i64::from_str_radix(&gamma, 2).unwrap();
+    let epsilon = i64::from_str_radix(&epsilon, 2).unwrap();
 
-    Ok(gamma * epsilon)
+    gamma * epsilon
 }

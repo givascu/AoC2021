@@ -1,9 +1,8 @@
-use std::error::Error;
-
-use crate::utils;
-
-pub fn solve(days: i64) -> Result<i64, Box<dyn Error>> {
-    let counters = utils::read_ints("input/06.txt", ",")?;
+pub fn solve(days: i64) -> i64 {
+    let counters = include_str!("../input/06.txt")
+        .split(',')
+        .map(|x| x.parse::<i64>().unwrap())
+        .collect::<Vec<_>>();
 
     let mut frequency: Vec<i64> = vec![0; 9];
     for c in counters {
@@ -20,5 +19,5 @@ pub fn solve(days: i64) -> Result<i64, Box<dyn Error>> {
         frequency[8] = spawners; // spawnees have a starting counter of 8
     }
 
-    Ok(frequency.iter().sum())
+    frequency.iter().sum()
 }

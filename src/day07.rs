@@ -1,9 +1,10 @@
-use std::{cmp, error::Error};
+use std::cmp;
 
-use crate::utils;
-
-pub fn solve_2() -> Result<i64, Box<dyn Error>> {
-    let positions = utils::read_ints("input/07.txt", ",")?;
+pub fn solve_2() -> i64 {
+    let positions = include_str!("../input/07.txt")
+        .split(',')
+        .map(|x| x.parse::<i64>().unwrap())
+        .collect::<Vec<_>>();
 
     let mut best = i64::MAX;
 
@@ -18,11 +19,14 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
         best = cmp::min(best, curr);
     }
 
-    Ok(best)
+    best
 }
 
-pub fn solve_1() -> Result<i64, Box<dyn Error>> {
-    let positions = utils::read_ints("input/07.txt", ",")?;
+pub fn solve_1() -> i64 {
+    let positions = include_str!("../input/07.txt")
+        .split(',')
+        .map(|x| x.parse::<i64>().unwrap())
+        .collect::<Vec<_>>();
 
     let mut best = i64::MAX;
 
@@ -36,5 +40,5 @@ pub fn solve_1() -> Result<i64, Box<dyn Error>> {
         best = cmp::min(best, curr);
     }
 
-    Ok(best)
+    best
 }
