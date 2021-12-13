@@ -9,7 +9,7 @@ pub fn solve_2() -> i64 {
     let mut best = i64::MAX;
 
     for (i, p1) in positions.iter().enumerate() {
-        let mut curr = 0i64;
+        let mut curr = 0_i64;
         for (j, p2) in positions.iter().enumerate() {
             if i != j {
                 let dist = (p2 - p1).abs();
@@ -31,7 +31,7 @@ pub fn solve_1() -> i64 {
     let mut best = i64::MAX;
 
     for (i, p1) in positions.iter().enumerate() {
-        let mut curr = 0i64;
+        let mut curr = 0_i64;
         for (j, p2) in positions.iter().enumerate() {
             if i != j {
                 curr += (p2 - p1).abs();

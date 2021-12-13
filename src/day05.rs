@@ -54,19 +54,19 @@ pub fn solve_2() -> Result<i64, Box<dyn Error>> {
 
         if l.p1.0 == l.p2.0 {
             // X coordinate is the same
-            for y in y_min..(y_max + 1) {
+            for y in y_min..=y_max {
                 *crossed.entry((l.p1.0, y)).or_insert(0) += 1;
             }
         } else if l.p1.1 == l.p2.1 {
             // Y coordinate is the same
-            for x in x_min..(x_max + 1) {
+            for x in x_min..=x_max {
                 *crossed.entry((x, l.p1.1)).or_insert(0) += 1;
             }
         } else if (l.p1.0 - l.p2.0).abs() == (l.p1.1 - l.p2.1).abs() {
             // 45 degree line
             let slope = (l.p2.1 - l.p1.1) / (l.p2.0 - l.p1.0);
             let b = l.p1.1 - slope * l.p1.0;
-            for x in x_min..(x_max + 1) {
+            for x in x_min..=x_max {
                 let y = slope * x + b;
                 *crossed.entry((x, y)).or_insert(0) += 1;
             }

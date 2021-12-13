@@ -14,7 +14,7 @@ where
 pub fn solve_2() -> i64 {
     include_str!("../input/08.txt")
         .lines()
-        .fold(0i64, |acc, line| {
+        .fold(0_i64, |acc, line| {
             let mut parts = line.split('|').map(|x| {
                 x.trim()
                     .split(' ')
@@ -51,9 +51,9 @@ pub fn solve_2() -> i64 {
                 .iter()
                 .rev()
                 .enumerate()
-                .fold(0i64, |num, (i, digit)| {
+                .fold(0_i64, |num, (i, digit)| {
                     let (n, _) = all.iter().enumerate().find(|(_, x)| *x == digit).unwrap();
-                    num + (n * 10usize.pow(i as u32)) as i64
+                    num + (n * 10_usize.pow(u32::try_from(i).unwrap())) as i64
                 })
         })
 }
@@ -61,7 +61,7 @@ pub fn solve_2() -> i64 {
 pub fn solve_1() -> i64 {
     include_str!("../input/08.txt")
         .lines()
-        .fold(0i64, |acc, line| {
+        .fold(0_i64, |acc, line| {
             let (_, digits) = line.split_once('|').unwrap();
             acc + digits
                 .trim()

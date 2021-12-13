@@ -26,7 +26,7 @@ fn is_closing(c: char) -> bool {
     matches!(c, ')' | ']' | '}' | '>')
 }
 
-fn get_match(c: &char) -> char {
+fn get_match(c: char) -> char {
     match c {
         '(' => ')',
         '[' => ']',
@@ -83,7 +83,7 @@ fn complete_line(line: &str) -> Vec<char> {
         }
     }
 
-    stack.iter().map(get_match).rev().collect()
+    stack.iter().map(|c| get_match(*c)).rev().collect()
 }
 
 pub fn solve_2() -> i64 {
@@ -105,7 +105,7 @@ pub fn solve_2() -> i64 {
 pub fn solve_1() -> i64 {
     include_str!("../input/10.txt")
         .lines()
-        .fold(0i64, |score, line| {
+        .fold(0_i64, |score, line| {
             score
                 + match line_corrupted_at(line) {
                     Some(c) => get_score_1(c),

@@ -28,7 +28,7 @@ fn get_dominant_bits(diagnosis: &[String]) -> Vec<i64> {
 pub fn solve_2() -> i64 {
     let diagnosis = include_str!("../input/03.txt")
         .lines()
-        .map(|x| x.to_string())
+        .map(ToString::to_string)
         .collect::<Vec<_>>();
 
     let mut ogr = diagnosis.clone(); // oxygen generator rating
@@ -72,25 +72,21 @@ pub fn solve_2() -> i64 {
 }
 
 pub fn solve_1() -> i64 {
-    // let diagnosis = utils::read_strings("input/03.txt", "\n")?;
     let diagnosis = include_str!("../input/03.txt")
         .lines()
-        .map(|x| x.to_string())
+        .map(ToString::to_string)
         .collect::<Vec<_>>();
 
     let mut gamma = String::new();
     let mut epsilon = String::new();
 
     for b in get_dominant_bits(&diagnosis) {
-        match b {
-            1 => {
-                gamma.push('1');
-                epsilon.push('0');
-            }
-            _ => {
-                gamma.push('0');
-                epsilon.push('1');
-            }
+        if b == 1 {
+            gamma.push('1');
+            epsilon.push('0');
+        } else {
+            gamma.push('0');
+            epsilon.push('1');
         }
     }
 

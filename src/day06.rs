@@ -6,7 +6,7 @@ pub fn solve(days: i64) -> i64 {
 
     let mut frequency: Vec<i64> = vec![0; 9];
     for c in counters {
-        frequency[c as usize] += 1;
+        frequency[usize::try_from(c).unwrap()] += 1;
     }
 
     for _ in 0..days {
