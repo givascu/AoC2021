@@ -21,7 +21,7 @@ impl Paper {
             if self.grid.contains(&(y, x)) {
                 print!("#");
             } else {
-                print!(".");
+                print!(" ");
             }
             if x == self.x_max - 1 {
                 println!();
