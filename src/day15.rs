@@ -1,61 +1,93 @@
-use std::collections::{BTreeSet, HashMap};
+use std::{
+    collections::{BTreeSet, HashMap},
+    hash::Hash,
+    ops::{Deref, DerefMut},
+};
 
-type Point = (i64, i64);
-
-#[derive(Debug, Default)]
-struct Map {
-    grid: HashMap<Point, u32>,
-    height: i64,
-    width: i64,
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
+struct Point2D {
+    y: usize,
+    x: usize,
 }
 
-impl Map {
-    fn new() -> Map {
-        Map {
-            grid: HashMap::new(),
+impl Point2D {
+    fn new(y: usize, x: usize) -> Point2D {
+        Point2D { y, x }
+    }
+
+    fn neighbors(&self, y_max: usize, x_max: usize) -> Vec<Point2D> {
+        let mut v = Vec::new();
+        if self.y > 0 {
+            v.push(Point2D::new(self.y - 1, self.x));
+        }
+        if self.x > 0 {
+            v.push(Point2D::new(self.y, self.x - 1));
+        }
+        if self.y < y_max - 1 {
+            v.push(Point2D::new(self.y + 1, self.x));
+        }
+        if self.x < x_max - 1 {
+            v.push(Point2D::new(self.y, self.x + 1));
+        }
+        v
+    }
+}
+
+struct Map2D<T> {
+    map: HashMap<Point2D, T>,
+    height: usize,
+    width: usize,
+}
+
+impl<T> Deref for Map2D<T> {
+    type Target = HashMap<Point2D, T>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.map
+    }
+}
+
+impl<T> DerefMut for Map2D<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.map
+    }
+}
+
+impl<T: std::fmt::Display> Map2D<T> {
+    fn new() -> Map2D<T> {
+        Map2D {
+            map: HashMap::new(),
             height: 0,
             width: 0,
         }
     }
 
     fn _print(&self) {
-        itertools::iproduct!(0..self.height, 0..self.width).for_each(|(y, x)| {
-            print!("{}", self.grid.get(&(y, x)).unwrap());
+        for (y, x) in itertools::iproduct!(0..self.height, 0..self.width) {
+            print!("{}", self.get(&Point2D::new(y, x)).unwrap());
             if x == self.width - 1 {
                 println!();
             }
-        });
+        }
     }
 }
 
-fn get_neighbors(p: Point, p_max: Point) -> Vec<Point> {
-    [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        .iter()
-        .map(|&(dy, dx)| (p.0 + dy, p.1 + dx))
-        .filter(|&(y, x)| 0 <= y && y < p_max.0 && 0 <= x && x < p_max.1)
-        .collect()
-}
-
-fn get_input_map() -> Map {
-    let mut map = Map::new();
+fn build_input_map() -> Map2D<u32> {
+    let mut map = Map2D::new();
     for (y, line) in include_str!("../input/15.txt").lines().enumerate() {
-        for (x, c) in line.chars().map(|c| c.to_digit(10).unwrap()).enumerate() {
-            map.grid.insert((y as i64, x as i64), c);
+        for (x, val) in line.chars().map(|c| c.to_digit(10).unwrap()).enumerate() {
+            map.insert(Point2D::new(y, x), val);
         }
         map.height += 1;
-        map.width = line.chars().count() as i64;
+        map.width = line.chars().count();
     }
     map
 }
 
-fn dijkstra_shortest_paths(map: &Map, src: Point, dst: Point) -> u32 {
+fn dijkstra_shortest_paths(map: &Map2D<u32>, src: Point2D, dst: Point2D) -> u32 {
     // Keep a sorted set (priority queue) by distance to the src node.
-    let mut pqueue: BTreeSet<(u32, Point)> = BTreeSet::new();
-    let mut distance = map
-        .grid
-        .keys()
-        .map(|p| (*p, u32::MAX))
-        .collect::<HashMap<_, _>>();
+    let mut pqueue: BTreeSet<(u32, Point2D)> = BTreeSet::new();
+    let mut distance: HashMap<Point2D, u32> = map.keys().map(|p| (*p, u32::MAX)).collect();
 
     pqueue.insert((0, src));
     distance.entry(src).and_modify(|d| *d = 0);
@@ -66,8 +98,8 @@ fn dijkstra_shortest_paths(map: &Map, src: Point, dst: Point) -> u32 {
 
         let (dist_u, u) = closest;
 
-        for v in get_neighbors(u, (map.height, map.width)) {
-            let weight = *map.grid.get(&v).unwrap();
+        for v in u.neighbors(map.height, map.width) {
+            let weight = *map.get(&v).unwrap();
             let dist_v = *distance.get(&v).unwrap();
             if dist_v > dist_u + weight {
                 if dist_v != u32::MAX {
@@ -83,32 +115,39 @@ fn dijkstra_shortest_paths(map: &Map, src: Point, dst: Point) -> u32 {
 }
 
 pub fn solve_1() -> u32 {
-    let map = get_input_map();
-    dijkstra_shortest_paths(&map, (0, 0), (map.height - 1, map.width - 1))
+    let map1 = build_input_map();
+    dijkstra_shortest_paths(
+        &map1,
+        Point2D::new(0, 0),
+        Point2D::new(map1.height - 1, map1.width - 1),
+    )
 }
 
 pub fn solve_2() -> u32 {
-    let map = get_input_map();
-    let steps = 5_i64;
+    let map = build_input_map();
+    let steps = 5_usize;
 
-    let mut big_map = Map::new();
+    let mut big_map: Map2D<u32> = Map2D::new();
     big_map.height = map.height * steps;
     big_map.width = map.width * steps;
 
-    for y in 0..big_map.height {
-        let line = y / map.height;
-        for x in 0..big_map.width {
-            let col = x / map.width;
-            let delta = line + col;
-            let val = *map.grid.get(&(y % map.height, x % map.width)).unwrap();
-            let mut new_val = val + u32::try_from(delta).unwrap();
-            if new_val > 9 {
-                // FIXME: Adjust this if steps > 9 (wraps aroud twice).
-                new_val -= 9;
-            }
-            big_map.grid.insert((y, x), new_val);
+    for (y, x) in itertools::iproduct!(0..big_map.height, 0..big_map.width) {
+        let (line, col) = (y / map.height, x / map.width);
+        let delta = line + col;
+        let val = *map
+            .get(&Point2D::new(y % map.height, x % map.height))
+            .unwrap();
+        let mut new_val = val + u32::try_from(delta).unwrap();
+        if new_val > 9 {
+            // FIXME: Adjust this if steps > 9 (wraps aroud twice).
+            new_val -= 9;
         }
+        big_map.insert(Point2D::new(y, x), new_val);
     }
 
-    dijkstra_shortest_paths(&big_map, (0, 0), (big_map.height - 1, big_map.width - 1))
+    dijkstra_shortest_paths(
+        &big_map,
+        Point2D::new(0, 0),
+        Point2D::new(big_map.height - 1, big_map.width - 1),
+    )
 }
