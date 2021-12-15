@@ -1,3 +1,4 @@
+use std::fmt;
 use std::{
     collections::{BTreeSet, HashMap},
     hash::Hash,
@@ -53,27 +54,33 @@ impl<T> DerefMut for Map2D<T> {
     }
 }
 
-impl<T: std::fmt::Display> Map2D<T> {
-    fn new() -> Map2D<T> {
+impl<T> Map2D<T> {
+    fn new(height: usize, width: usize) -> Map2D<T> {
         Map2D {
             map: HashMap::new(),
-            height: 0,
-            width: 0,
-        }
-    }
-
-    fn _print(&self) {
-        for (y, x) in itertools::iproduct!(0..self.height, 0..self.width) {
-            print!("{}", self.get(&Point2D::new(y, x)).unwrap());
-            if x == self.width - 1 {
-                println!();
-            }
+            height,
+            width,
         }
     }
 }
 
+impl<T: fmt::Display> fmt::Debug for Map2D<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f)?;
+        for (y, x) in itertools::iproduct!(0..self.height, 0..self.width) {
+            if let Some(val) = self.get(&Point2D::new(y, x)) {
+                write!(f, "{}", val)?;
+            }
+            if x == self.width - 1 {
+                writeln!(f)?;
+            }
+        }
+        f.debug_struct("").finish()
+    }
+}
+
 fn build_input_map() -> Map2D<u32> {
-    let mut map = Map2D::new();
+    let mut map = Map2D::new(0, 0);
     for (y, line) in include_str!("../input/15.txt").lines().enumerate() {
         for (x, val) in line.chars().map(|c| c.to_digit(10).unwrap()).enumerate() {
             map.insert(Point2D::new(y, x), val);
@@ -115,11 +122,11 @@ fn dijkstra_shortest_paths(map: &Map2D<u32>, src: Point2D, dst: Point2D) -> u32 
 }
 
 pub fn solve_1() -> u32 {
-    let map1 = build_input_map();
+    let map = build_input_map();
     dijkstra_shortest_paths(
-        &map1,
+        &map,
         Point2D::new(0, 0),
-        Point2D::new(map1.height - 1, map1.width - 1),
+        Point2D::new(map.height - 1, map.width - 1),
     )
 }
 
@@ -127,9 +134,7 @@ pub fn solve_2() -> u32 {
     let map = build_input_map();
     let steps = 5_usize;
 
-    let mut big_map: Map2D<u32> = Map2D::new();
-    big_map.height = map.height * steps;
-    big_map.width = map.width * steps;
+    let mut big_map: Map2D<u32> = Map2D::new(map.height * steps, map.width * steps);
 
     for (y, x) in itertools::iproduct!(0..big_map.height, 0..big_map.width) {
         let (line, col) = (y / map.height, x / map.width);
