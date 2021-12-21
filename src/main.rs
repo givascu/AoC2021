@@ -18,6 +18,7 @@ mod day15;
 mod day16;
 mod day17;
 mod day20;
+mod day21;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -41,6 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("16: {} {}", day16::solve_1(), day16::solve_2());
             println!("17: {} {}", day17::solve_1(), day17::solve_2());
             println!("20: {} {}", day20::solve_1(), day20::solve_2());
+            println!("21: {} {}", day21::solve_1(), day21::solve_2());
         }
         _ => match args[1].as_str() {
             "1" => println!("{} {}", day01::solve_1(), day01::solve_2()),
@@ -61,6 +63,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "16" => println!("{} {}", day16::solve_1(), day16::solve_2()),
             "17" => println!("{} {}", day17::solve_1(), day17::solve_2()),
             "20" => println!("{} {}", day20::solve_1(), day20::solve_2()),
+            "21" => println!("{} {}", day21::solve_1(), day21::solve_2()),
             _ => return Err(format!("Invalid day: '{}'", args[1]).into()),
         },
     }
