@@ -20,10 +20,6 @@ impl Dice {
         self.counter += 1;
         retval
     }
-
-    fn counter(&self) -> u32 {
-        self.counter
-    }
 }
 
 #[derive(Debug, Clone)]
@@ -35,10 +31,6 @@ struct Player {
 impl Player {
     fn new(pos: u32) -> Player {
         Player { pos, score: 0 }
-    }
-
-    fn score(&self) -> u32 {
-        self.score
     }
 
     fn advance(&mut self, steps: u32) {
@@ -79,13 +71,13 @@ pub fn solve_1() -> u32 {
 
         if round % 2 == 1 {
             p1.advance(roll);
-            if p1.score() >= 1000 {
-                return p2.score() * dice.counter();
+            if p1.score >= 1000 {
+                return p2.score * dice.counter;
             }
         } else {
             p2.advance(roll);
-            if p2.score() >= 1000 {
-                return p1.score() * dice.counter();
+            if p2.score >= 1000 {
+                return p1.score * dice.counter;
             }
         }
     }
@@ -109,11 +101,11 @@ fn count_wins(
     win1: &mut u64,
     win2: &mut u64,
 ) {
-    if p1.score() >= 21 {
+    if p1.score >= 21 {
         *win1 += exp;
         return;
     }
-    if p2.score() >= 21 {
+    if p2.score >= 21 {
         *win2 += exp;
         return;
     }
