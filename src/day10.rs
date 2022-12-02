@@ -77,9 +77,12 @@ fn complete_line(line: &str) -> Vec<char> {
             stack.push(c);
         } else if is_closing(c) {
             let k = stack.pop().unwrap();
-            if !is_matching(k, c) {
-                panic!("Current char {} does not match previous char {}", c, k);
-            }
+            assert!(
+                is_matching(k, c),
+                "Current char {} does not match previous char {}",
+                c,
+                k
+            );
         }
     }
 
@@ -89,7 +92,7 @@ fn complete_line(line: &str) -> Vec<char> {
 pub fn solve_2() -> i64 {
     let mut scores = include_str!("../input/10.txt")
         .lines()
-        .filter(|line| line_corrupted_at(*line).is_none())
+        .filter(|line| line_corrupted_at(line).is_none())
         .map(|incomplete_line| {
             complete_line(incomplete_line)
                 .iter()

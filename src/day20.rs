@@ -127,7 +127,7 @@ fn read_input() -> (Map2D, Vec<u8>) {
         .next()
         .unwrap()
         .chars()
-        .map(|c| if c == '#' { 1_u8 } else { 0 })
+        .map(|c| u8::from(c == '#'))
         .collect::<Vec<_>>();
 
     let size = input.lines().nth(2).unwrap().chars().count();
@@ -137,7 +137,7 @@ fn read_input() -> (Map2D, Vec<u8>) {
         for (x, c) in line.chars().enumerate() {
             map.insert(
                 Point2D::new(y.try_into().unwrap(), x.try_into().unwrap()),
-                if c == '#' { 1 } else { 0 },
+                u8::from(c == '#'),
             );
         }
     }

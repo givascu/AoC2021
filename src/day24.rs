@@ -70,13 +70,7 @@ impl Alu {
                         "mul" => val1 * val2,
                         "div" => val1 / val2,
                         "mod" => val1 % val2,
-                        "eql" => {
-                            if val1 == val2 {
-                                1
-                            } else {
-                                0
-                            }
-                        }
+                        "eql" => i64::from(val1 == val2),
                         _ => panic!("Unknown instruction: {}", op),
                     };
                     *self.var_ref(param1) = res;

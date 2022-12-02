@@ -41,12 +41,13 @@ fn calculate_pkt(bits: &[u8], start: usize) -> (u64, usize) {
 
         loop {
             let (val, new_idx) = calculate_pkt(bits, idx);
-            if new_idx > orig_idx + subpkt_len {
-                panic!(
-                    "Index out of range after recursion: idx = {}, subpkt_len = {}, new_idx = {}",
-                    idx, subpkt_len, new_idx
-                );
-            }
+            assert!(
+                new_idx <= orig_idx + subpkt_len,
+                "Index out of range after recursion: idx = {}, subpkt_len = {}, new_idx = {}",
+                idx,
+                subpkt_len,
+                new_idx
+            );
             values.push(val);
             idx = new_idx;
             if orig_idx + subpkt_len == new_idx {
@@ -71,9 +72,9 @@ fn calculate_pkt(bits: &[u8], start: usize) -> (u64, usize) {
         1 => (values.iter().product(), idx),
         2 => (*values.iter().min().unwrap(), idx),
         3 => (*values.iter().max().unwrap(), idx),
-        5 => (if values[0] > values[1] { 1 } else { 0 }, idx),
-        6 => (if values[0] < values[1] { 1 } else { 0 }, idx),
-        7 => (if values[0] == values[1] { 1 } else { 0 }, idx),
+        5 => (u64::from(values[0] > values[1]), idx),
+        6 => (u64::from(values[0] < values[1]), idx),
+        7 => (u64::from(values[0] == values[1]), idx),
         _ => panic!("Unknown type_id = {}", type_id),
     }
 }
@@ -109,12 +110,13 @@ fn accumulate_pkt_ver(bits: &[u8], start: usize) -> (u64, usize) {
 
             loop {
                 let (ver, new_idx) = accumulate_pkt_ver(bits, idx);
-                if new_idx > orig_idx + subpkt_len {
-                    panic!(
-                        "Index out of range after recursion: idx = {}, subpkt_len = {}, new_idx = {}",
-                        idx, subpkt_len, new_idx
-                    );
-                }
+                assert!(
+                    new_idx <= orig_idx + subpkt_len,
+                    "Index out of range after recursion: idx = {}, subpkt_len = {}, new_idx = {}",
+                    idx,
+                    subpkt_len,
+                    new_idx
+                );
                 version += ver;
                 idx = new_idx;
                 if orig_idx + subpkt_len == new_idx {
