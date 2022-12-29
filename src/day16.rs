@@ -64,7 +64,7 @@ fn calculate_pkt(bits: &[u8], start: usize) -> (u64, usize) {
             idx = new_idx;
         }
     } else {
-        panic!("Unknown length_type_id = {}", length_type_id);
+        panic!("Unknown length_type_id = {length_type_id}");
     }
 
     match type_id {
@@ -75,7 +75,7 @@ fn calculate_pkt(bits: &[u8], start: usize) -> (u64, usize) {
         5 => (u64::from(values[0] > values[1]), idx),
         6 => (u64::from(values[0] < values[1]), idx),
         7 => (u64::from(values[0] == values[1]), idx),
-        _ => panic!("Unknown type_id = {}", type_id),
+        _ => panic!("Unknown type_id = {type_id}"),
     }
 }
 
@@ -133,7 +133,7 @@ fn accumulate_pkt_ver(bits: &[u8], start: usize) -> (u64, usize) {
                 idx = new_idx;
             }
         } else {
-            panic!("Unknown length_type_id = {}", length_type_id);
+            panic!("Unknown length_type_id = {length_type_id}");
         }
     }
 

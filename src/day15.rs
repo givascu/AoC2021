@@ -69,7 +69,7 @@ impl<T: fmt::Display> fmt::Debug for Map2D<T> {
         writeln!(f)?;
         for (y, x) in itertools::iproduct!(0..self.height, 0..self.width) {
             if let Some(val) = self.get(&Point2D::new(y, x)) {
-                write!(f, "{}", val)?;
+                write!(f, "{val}")?;
             }
             if x == self.width - 1 {
                 writeln!(f)?;

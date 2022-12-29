@@ -28,7 +28,7 @@ impl Alu {
             "x" => &mut self.x,
             "y" => &mut self.y,
             "z" => &mut self.z,
-            _ => panic!("Unknown variable: {}", var),
+            _ => panic!("Unknown variable: {var}"),
         }
     }
 
@@ -38,7 +38,7 @@ impl Alu {
             "x" => self.x,
             "y" => self.y,
             "z" => self.z,
-            _ => panic!("Unknown variable: {}", var),
+            _ => panic!("Unknown variable: {var}"),
         }
     }
 
@@ -71,11 +71,11 @@ impl Alu {
                         "div" => val1 / val2,
                         "mod" => val1 % val2,
                         "eql" => i64::from(val1 == val2),
-                        _ => panic!("Unknown instruction: {}", op),
+                        _ => panic!("Unknown instruction: {op}"),
                     };
                     *self.var_ref(param1) = res;
                 }
-                _ => panic!("Unknown instruction: {}", op),
+                _ => panic!("Unknown instruction: {op}"),
             }
         }
     }

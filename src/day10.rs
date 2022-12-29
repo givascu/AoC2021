@@ -38,7 +38,7 @@ fn get_match(c: char) -> char {
         '}' => '{',
         '>' => '<',
 
-        _ => panic!("Unexpected char: {}", c),
+        _ => panic!("Unexpected char: {c}"),
     }
 }
 
