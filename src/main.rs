@@ -18,6 +18,7 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
+mod day19;
 mod day20;
 mod day21;
 mod day22;
@@ -46,6 +47,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("16: {} {}", day16::solve_1(), day16::solve_2());
             println!("17: {} {}", day17::solve_1(), day17::solve_2());
             println!("18: {} {}", day18::solve_1(), day18::solve_2());
+            println!("19: {} {}", day19::solve_1(), day19::solve_2());
             println!("20: {} {}", day20::solve_1(), day20::solve_2());
             println!("21: {} {}", day21::solve_1(), day21::solve_2());
             println!("22: {} {}", day22::solve_1(), day22::solve_2());
@@ -71,6 +73,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "16" => println!("{} {}", day16::solve_1(), day16::solve_2()),
             "17" => println!("{} {}", day17::solve_1(), day17::solve_2()),
             "18" => println!("{} {}", day18::solve_1(), day18::solve_2()),
+            "19" => println!("{} {}", day19::solve_1(), day19::solve_2()),
             "20" => println!("{} {}", day20::solve_1(), day20::solve_2()),
             "21" => println!("{} {}", day21::solve_1(), day21::solve_2()),
             "22" => println!("{} {}", day22::solve_1(), day22::solve_2()),
